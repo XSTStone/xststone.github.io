@@ -182,30 +182,17 @@
 <li><em>Using basic digital images operations</em></li>
 <li><em>Combine them to implement object splitting algorithm</em></li>
 </ul>
-<h3 id="mathbb-Theory"><a href="#mathbb-Theory" class="headerlink" title="$\mathbb{Theory}$"></a>$\mathbb{Theory}$</h3><h4 id="mathbb-Basic-space-morphological-space-operations"><a href="#mathbb-Basic-space-morphological-space-operations" class="headerlink" title="$\mathbb{Basic\space morphological\space operations}$"></a>$\mathbb{Basic\space morphological\space operations}$</h4><ol>
-<li><p><strong>Dilation</strong></p>
-<p> $A\oplus B$, where A is a binary image and B is an structural element. Its calculation formula can be written as $$dst(x,y) = max (src(x+x’, y+y’)), (x’,y’):element(x’,y’) \neq 0$$</p>
-</li>
-<li><p><strong>Erosion</strong></p>
-<p> The simliar operation as dilation, but the $max$ function in formula changes to $min$ function. Thus, it’s $A\ominus B$, and the calculation formula is $$dst(x,y) = max (src(x+x’, y+y’)), (x’,y’):element(x’,y’) \neq 0$$</p>
-</li>
-<li><p><strong>Open</strong></p>
-<p> Open operation is a combination of dilation and erosion. It can be written as $(A\ominus B)\oplus B$. </p>
-<p> This operation can be used to remove small objects, split object by the thin junction.</p>
-</li>
-<li><p><strong>Close</strong></p>
-<p> Close operation is also a combination of dilation and erosion. It can be written as $(A\oplus B)\ominus B$.</p>
-<p> This operation can be used to remove some little black holes in the image.</p>
-</li>
-<li><p><strong>Bwareaopen</strong></p>
-<p> This operation can be used to remove small connectivity object from the image.</p>
-</li>
-<li><p><strong>Contour detection</strong></p>
-<p> Contour consists of internal contour and external contour. </p>
-<p> For the internal contour detection, the formula is $A - (A\ominus B)$.</p>
-<p> For the external contour detection, the formula is $A - (A\oplus B)$.</p>
-</li>
-</ol>
+<h3 id="mathbb-Theory"><a href="#mathbb-Theory" class="headerlink" title="$\mathbb{Theory}$"></a>$\mathbb{Theory}$</h3><h4 id="mathbb-Basic-space-morphological-space-operations"><a href="#mathbb-Basic-space-morphological-space-operations" class="headerlink" title="$\mathbb{Basic\space morphological\space operations}$"></a>$\mathbb{Basic\space morphological\space operations}$</h4><p><strong>Dilation</strong></p>
+<p>$A\oplus B$, where A is a binary image and B is an structural element. Its calculation formula can be written as $$dst(x,y) = max (src(x+x’, y+y’)), (x’,y’):element(x’,y’) \neq 0$$<br><strong>Erosion</strong></p>
+<p>The simliar operation as dilation, but the $max$ function in formula changes to $min$ function. Thus, it’s $A\ominus B$, and the calculation formula is $$dst(x,y) = max (src(x+x’, y+y’)), (x’,y’):element(x’,y’) \neq 0$$<br><strong>Open</strong></p>
+<p>Open operation is a combination of dilation and erosion. It can be written as $(A\ominus B)\oplus B$. </p>
+<p>This operation can be used to remove small objects, split object by the thin junction.<br><strong>Close</strong></p>
+<p>Close operation is also a combination of dilation and erosion. It can be written as $(A\oplus B)\ominus B$.</p>
+<p>This operation can be used to remove some little black holes in the image.<br><strong>Bwareaopen</strong></p>
+<p>This operation can be used to remove small connectivity object from the image.<br><strong>Contour detection</strong></p>
+<p>Contour consists of internal contour and external contour. </p>
+<p>For the internal contour detection, the formula is $A - (A\ominus B)$.</p>
+<p>For the external contour detection, the formula is $A - (A\oplus B)$.</p>
 <div STYLE="page-break-after: always;"></div>
 
 <h4 id="mathbb-Separating-space-objects"><a href="#mathbb-Separating-space-objects" class="headerlink" title="$\mathbb{Separating\space objects}$"></a>$\mathbb{Separating\space objects}$</h4><ol>
