@@ -138,6 +138,90 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Multicollinearity" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/01/11/Multicollinearity/">Machine learning multicollinearity</a>
+    </h1>
+  
+
+        
+        <a href="/2022/01/11/Multicollinearity/" class="archive-article-date">
+  	<time datetime="2022-01-11T09:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Multicollinearity"><a href="#Multicollinearity" class="headerlink" title="Multicollinearity"></a>Multicollinearity</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>When working with linear regression, it usually comes with multicollinearity. It means that different independent variables have connections between each other.</p>
+<p>This phenomenon is usual, so that it won’t change into big problem unless it causes low robustness. In this case, the samples of regression parameters will be reverse.</p>
+<h2 id="Why-multicollinearity-happen"><a href="#Why-multicollinearity-happen" class="headerlink" title="Why multicollinearity happen"></a>Why multicollinearity happen</h2><p>Multicollinearity means when one independent variable is changing, it will cause the other one or more independent variable(s) change. For independent variables, they should be independent. And we can see different variables have different impact on $Y$ via analyzing the regression result.</p>
+<p>However, if $Xs$ have strong <strong>linear connections</strong> between themselves, we cannot find the impacts causing by each $X$ since we can’t control the variables. Thus, we can not find the real connection between $Y$ and each of $Xs$.</p>
+<p>Moreover, multicollinearity will happen in many cases. Such as:</p>
+<ul>
+<li>Lack of input data. In this case, collecting more data will somehow solve this problem.</li>
+<li>Incorrect use of independent variables. </li>
+</ul>
+<h2 id="Judge-multicollinearity"><a href="#Judge-multicollinearity" class="headerlink" title="Judge multicollinearity"></a>Judge multicollinearity</h2><p>Usually, we use the value of VIF to see how serious the multicollinearity is.</p>
+<p>If VIF is more than 10, we can say that our model gets in serious multicollinearity problem.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Deep learning basics</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/01/11/Multicollinearity/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Hypothesis-space" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -145,7 +229,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2022/01/06/Hypothesis-space/">Hypothesis space</a>
+      <a class="article-title" href="/2022/01/06/Hypothesis-space/">Machine learning hypothesis space</a>
     </h1>
   
 
@@ -2047,6 +2131,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">IS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Deep learning basics</a>
               </li>
             
             <div class="clearfix"></div>
