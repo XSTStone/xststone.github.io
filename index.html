@@ -138,6 +138,91 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-修改sudoers" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/04/28/%E4%BF%AE%E6%94%B9sudoers/">修改sudoers</a>
+    </h1>
+  
+
+        
+        <a href="/2022/04/28/%E4%BF%AE%E6%94%B9sudoers/" class="archive-article-date">
+  	<time datetime="2022-04-28T06:06:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="修改了sudoers文件及后续"><a href="#修改了sudoers文件及后续" class="headerlink" title="修改了sudoers文件及后续"></a>修改了sudoers文件及后续</h3><p>由于FECLab的编译运行，博客的部署推送需要用到terminal命令，且需要输入<del>很多</del>命令，于是新建了两个command文件，用于自动化完成这些工作。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># compile command</span><br><span class="line">cd /Users/stone/VerilogProj/lab2_var1</span><br><span class="line">iverilog -o model *v</span><br><span class="line">vvp model</span><br><span class="line">gtkwave time.vcd</span><br><span class="line"></span><br><span class="line"># hexo deploy command</span><br><span class="line">cd /Users/stone/blog/</span><br><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">sudo hexo d</span><br></pre></td></tr></table></figure>
+
+<p>但是在部署过程中，由于blog文件夹是在根目录stone下，所以部署推送的过程中需要sudo命令来读取其中的配置文件。而sudo命令的运行，又需要手动输入电脑密码，就使得自动化流程变得不再自动化，于是我就跑去修改了/etc/sudoers文件，从而使得当前用户在使用sudo命令时，不再需要密码。</p>
+<p>完成上边的目标其实很简单，只需要把原来文件中的<code>%admin ALL = (ALL)</code> 改成<code>%admin ALL = NOPASSWD:ALL</code>就可以了。但是我使用的是vim，且把内容修改错了，就导致我直接寄了。</p>
+<p>本来修改sudoers文件，MAC上有专门的命令行编辑工具，visudo，这个程序可以帮忙检测修改后的sudeors文件有没有语法错误，从而避免sudo命令无法使用。</p>
+<blockquote>
+<p>补充：sudo命令的运行需要首先编译识别sudoers文件，并且在编译识别的时候，需要保证sudoers文件的权限是<code>None global</code>。也就是说，只有root用户有权修改其中的内容 ，即只能使用sudo命令才能在terminal中修改sudoers内容。</p>
+</blockquote>
+<p>这里就有可能会出现一个严重的闭环问题，如果你在修改sudoers内容的时候，没有使用命令<code>sudo visudo</code>，那么普通的终端编辑器（vim等）就不会检查语法是否出错。就很大概率出现：由于sudoers内容语法错误，导致sudoers无法正常编译，sudo命令也就无法使用；而修改出错的sudoers内容又必须要sudo命令。这样的死循环。</p>
+<p>很不幸，我就干了这样的事情。由于陷入了死循环，导致我试了多种方法，依然没什么用。而且不知道为什么，我在开机时按住<code>command + S </code>并不能进入单用户模式，也就宣告着在单用户模式绕过sudo命令的方法失败。</p>
+<p>于是，在已经准备好重装系统的情况下，我尝试了最后一种方法：把自己的用户改成root，并且在文件的详情页面将修改权限改为root。直接双击sudoers文件，在文本编辑器将内容改为正确的。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">MAC</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/04/28/%E4%BF%AE%E6%94%B9sudoers/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-FEC-lab2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2058,79 +2143,6 @@ Task2 --- Model1([Logistic regression])</pre>
 
 
   
-    <article id="post-Information-system-report" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/01/04/Information-system-report/">Information system report</a>
-    </h1>
-  
-
-        
-        <a href="/2022/01/04/Information-system-report/" class="archive-article-date">
-  	<time datetime="2022-01-04T12:58:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">IS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2022/01/04/Information-system-report/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -2259,11 +2271,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">IS</a>
+                <a href="javascript:void(0)" class="js-tag color1">Deep learning basics</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Deep learning basics</a>
+                <a href="javascript:void(0)" class="js-tag color4">MAC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">IS</a>
               </li>
             
             <div class="clearfix"></div>
