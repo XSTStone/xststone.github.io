@@ -138,6 +138,954 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Image-processing-Lab2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/01/04/Image-processing-Lab2/">Image processing Lab2</a>
+    </h1>
+  
+
+        
+        <a href="/2022/01/04/Image-processing-Lab2/" class="archive-article-date">
+  	<time datetime="2022-01-04T13:03:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
+</script>
+
+<h1> <center> Image Processing </center> </h1>
+
+<h2 id="mathbf-Lab-space-No2"><a href="#mathbf-Lab-space-No2" class="headerlink" title=" $\mathbf{Lab\space No2}$ "></a><center> $\mathbf{Lab\space No2}$ </center></h2><p><em><h3> $\mathbb {Student\space Info}$ </h3></em><br><strong><center> Name: Xiao Shitong <br> HDU ID: 19321123 <br>ITMO ID: 293647</center></strong></p>
+<div STYLE="page-break-after: always;"></div>
+
+<h3 id="mathbb-Purpose"><a href="#mathbb-Purpose" class="headerlink" title="$\mathbb{Purpose}$"></a>$\mathbb{Purpose}$</h3><ul>
+<li><em>Know basic types of mapping functions</em></li>
+<li><em>Know geometric transformations for spatial image correction</em></li>
+</ul>
+<h3 id="mathbb-Theory"><a href="#mathbb-Theory" class="headerlink" title="$\mathbb{Theory}$"></a>$\mathbb{Theory}$</h3><h4 id="Simplest-Geometric-Transformations"><a href="#Simplest-Geometric-Transformations" class="headerlink" title="Simplest Geometric Transformations"></a><em>Simplest Geometric Transformations</em></h4><ul>
+<li><p><strong>Image Shift</strong><br>$$x’\space=x\space+C\\ y’\space=y\space+F$$<br>$$\Rightarrow T\space=\space\begin{pmatrix}<br>1\space&amp;\space 0\space&amp;\space 0\space\\<br>0\space&amp;\space 1\space&amp;\space 0\space\\<br>C\space&amp;\space F\space&amp;\space 1\space<br>\end{pmatrix}$$<br>Where $C$ and $F$ are ,the shift distance along axes $Ox$ and $Oy$ correspondingly.</p>
+</li>
+<li><p><strong>Flip</strong><br>$$x’\space=x\\ y’\space=-y$$<br>$$\Rightarrow T\space=\space\begin{pmatrix}<br>1\space&amp;\space 0\space&amp;\space 0\space\\<br>0\space&amp;\space -1\space&amp;\space 0\space\\<br>0\space&amp;\space 0\space&amp;\space 1\space<br>\end{pmatrix}$$<br>Where the coefficient of y is -1, the image will flip around the axis $Ox$. </p>
+</li>
+<li><p><strong>Scale</strong><br>$$x’\space=\space\alpha x,\space\alpha&gt;0\\ y’\space=\space\beta y,\space\beta&gt;0$$<br>$$\Rightarrow T\space=\space\begin{pmatrix}<br>\alpha\space&amp;\space 0\space&amp;\space 0\space\\<br>0\space&amp;\space \beta\space&amp;\space 0\space\\<br>0\space&amp;\space 0\space&amp;\space 1\space<br>\end{pmatrix}$$<br>Where $\alpha$ is coefficient of scaling across the axis $Ox$, and $\beta$ is coefficient of scaling across the axis $Oy$.</p>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<ul>
+<li><strong>Rotation</strong><br>$$x’\space=\space x \cos\theta\space-\space y \sin\theta\\ y’\space=\space x \sin\theta\space+\space y \cos\theta$$<br>$$\Rightarrow T\space=\space\begin{pmatrix}<br>\cos\theta\space&amp;\space \sin\theta\space&amp;\space 0\space\\ </li>
+</ul>
+<p>-\sin\theta\space&amp;\space \cos\theta\space&amp;\space 0\space\\<br>0\space&amp;\space 0\space&amp;\space 1\space<br>\end{pmatrix}$$<br>Where $\theta$ is the image rotation angle, it should be measured in radian system.</p>
+<ul>
+<li><p><strong>Affine Mapping</strong><br>$$dst(x,\space y)\space=\space src(M_{11} x\space+M_{12} y\space+M_{13},\space M_{21} x\space+M_{22} y\space+M_{23})$$<br>Here we use OpenCV prebuilt function <br><br><code>warpAffine(src, M, dsize[, dst[, flags[, borderMode[, borderValue]]]])</code><br>And the function uses the formula above.</p>
+</li>
+<li><p><strong>Image Bevel</strong><br>$$x’\space=\space x\space+sy\\ y’\space=y$$<br>$$\Rightarrow T\space=\space\begin{pmatrix}<br>1\space&amp;\space 0\space&amp;\space 0\space\\<br>s\space&amp;\space 1\space&amp;\space 0\space\\<br>0\space&amp;\space 0\space&amp;\space 1\space<br>\end{pmatrix}$$<br>Where $s$ is the coefficient positively associated with  the beveling angle.</p>
+</li>
+<li><p><strong>Piecewise-Linear Mapping</strong><br>This mapping function is similar to the <strong>Affine Mapping</strong>. The difference is the function split the image into several parts, we can apply <strong>Affine Mapping</strong> on different parts separately.</p>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<h4 id="Distortion"><a href="#Distortion" class="headerlink" title="Distortion"></a><em>Distortion</em></h4><ul>
+<li><p><strong>Projection Mapping</strong><br>$$x’\space=\frac{Ax\space+\space By\space+\space C}{Gx\space+\space Hy\space+\space I},\\ y’\space=\frac{Dx\space+\space Ey\space+\space F}{Gx\space+\space Hy\space+\space I}$$<br>$$\Rightarrow T\space=\space\begin{pmatrix}<br>A\space&amp;\space B\space&amp;\space C\space\\<br>D\space&amp;\space E\space&amp;\space F\space\\<br>G\space&amp;\space H\space&amp;\space I\space<br>\end{pmatrix}$$<br>Where matrix $T$ can be used to project one image onto another viewing plane.</p>
+</li>
+<li><p><strong>Polynomial Mapping</strong><br>$$x’\space=\space a_{1}\space+\space a_{2}x\space+\space a_{3}y\space+\space a_{4}x^{2}\space+\space a_{5}xy\space+a_{6}y^{2}\\ y’\space=\space b_{1}\space+\space b_{2}x\space+\space b_{3}y\space+\space b_{4}x^{2}\space+\space b_{5}xy\space+b_{6}y^{2}$$<br>Where $a_{1}…a{6}$, $b{1}…b{6}$ are the coefficients determining the mapping effect.</p>
+</li>
+<li><p><strong>Sinusoidal Distortion</strong> <br><br>Sinusoidal distortion uses function <code>remap</code> prebuilt in OpenCV to transform image according to new pixel coordinates specified for each pixel of the source image.</p>
+</li>
+<li><p><strong>Barrel Distortion</strong> <br><br>Barrel distortion uses polar system as the intermediary agent for distorting the image. And functions <code>cartToPolar</code> and <code>polarToCart</code> can perform these.</p>
+</li>
+</ul>
+<h4 id="Stitching"><a href="#Stitching" class="headerlink" title="Stitching"></a><em>Stitching</em></h4><ul>
+<li><strong>Stitching</strong><br>$$x’\space=\space a_{1}\space+\space a_{2}x\space+\space a_{3}y,\\ y’\space=\space b_{1}\space+\space b_{2}x\space+\space b_{3}$$</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<h3 id="mathbb-Assignment-space-Progress"><a href="#mathbb-Assignment-space-Progress" class="headerlink" title="$\mathbb{Assignment\space Progress}$"></a>$\mathbb{Assignment\space Progress}$</h3><h4 id="mathbb-Original-space-Images"><a href="#mathbb-Original-space-Images" class="headerlink" title="$\mathbb{Original\space Images}$"></a>$\mathbb{Original\space Images}$</h4><table>
+<thead>
+<tr>
+<th align="center">Transformation &amp; Distortion</th>
+<th align="center">Stitch up</th>
+<th align="center">Stitch down</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80axe2b1j30u00um0xa.jpg width=40%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80axe2b1j30u00um0xa.jpg width=40%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80clvcl2j30ry0wjafg.jpg width=40%></td>
+</tr>
+</tbody></table>
+<h4 id="mathbb-Code-space-and-space-Result-space-Images"><a href="#mathbb-Code-space-and-space-Result-space-Images" class="headerlink" title="$\mathbb{Code\space and\space Result\space Images}$"></a>$\mathbb{Code\space and\space Result\space Images}$</h4><ul>
+<li><strong>Shift</strong><ul>
+<li><p>Key Codes</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rows, cols = img.shape[0:2]</span><br><span class="line">shift_x, shift_y = (50, 100)</span><br><span class="line">T = np.float32([[1, 0, shift_x], [0, 1, shift_y]])</span><br><span class="line">img_shift = cv.warpAffine(img, T, (cols, rows))</span><br><span class="line">cv.imshow(&quot;Shift&quot;, img_shift)</span><br></pre></td></tr></table></figure></li>
+<li><p>Result Images</p>
+<table>
+<thead>
+<tr>
+<th align="center">Original</th>
+<th align="center">Shift</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80axe2b1j30u00um0xa.jpg width=40%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80knk8qqj30ry0saadn.jpg width=40%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<ul>
+<li><p><strong>Flip</strong></p>
+<ul>
+<li><p>Key Codes</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">rows, cols = img.shape[0:2]</span><br><span class="line"># Flip around Ox</span><br><span class="line">T = np.float32([[1, 0, 0], [0, -1, rows - 1]])</span><br><span class="line">img_flip_x = cv.warpAffine(img, T, (cols, rows))</span><br><span class="line"># img_flip_x = cv.flip(img, 0)</span><br><span class="line">cv.imshow(&quot;Flip around Ox&quot;, img_flip_x)</span><br><span class="line"></span><br><span class="line"># Flip around Oy</span><br><span class="line">T = np.float32([[-1, 0, cols - 1], [0, 1, 0]])</span><br><span class="line">img_flip_y = cv.warpAffine(img, T, (cols, rows))</span><br><span class="line"># img_flip_y = cv.flip(img, 1)</span><br><span class="line">cv.imshow(&quot;Flip around Oy&quot;, img_flip_y)</span><br></pre></td></tr></table></figure></li>
+<li><p>Result Images</p>
+<table>
+<thead>
+<tr>
+<th align="center">Original</th>
+<th align="center">Flip around Ox</th>
+<th align="center">Flip around Oy</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80axe2b1j30u00um0xa.jpg width=40%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80rm3fbhj30rt0s9q6x.jpg width=40%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80s595idj30rv0s4q6x.jpg width=40%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<ul>
+<li><p><strong>Scale</strong></p>
+<ul>
+<li><p>Key Codes</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rows, cols = img.shape[0:2]</span><br><span class="line">scale_x, scale_y = (1.5, 0.5)</span><br><span class="line">T = np.float32([[scale_x, 0, 0], [0, scale_y, 0]])</span><br><span class="line">img_scale = cv.warpAffine(img, T, (int(cols * scale_x), int(rows * scale_y)))</span><br><span class="line"># img_scale = cv.resize(img, None, fx=scale_x, fy=scale_y, interpolation=cv.INTER_CUBIC)</span><br><span class="line">cv.imshow(&quot;Scale&quot;, img_scale)</span><br></pre></td></tr></table></figure></li>
+<li><p>Result Images</p>
+<table>
+<thead>
+<tr>
+<th align="center">Original</th>
+<th align="center">Scaled</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80axe2b1j30u00um0xa.jpg width=40%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80vh7dsjj315s0e1juh.jpg></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p><strong>Rotation</strong></p>
+<ul>
+<li>Key Codes<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    rows, cols = img.shape[0:2]</span><br><span class="line">phi = 17.0</span><br><span class="line">phi_rad = phi * math.pi / 180</span><br><span class="line">T = cv.getRotationMatrix2D(</span><br><span class="line">    ((cols - 1) / 2.0, (rows - 1) / 2.0), -phi, 1</span><br><span class="line">)</span><br><span class="line">img_rotate = cv.warpAffine(img, T, (cols, rows))</span><br><span class="line">cv.imshow(&quot;Rotate&quot;, img_rotate)</span><br></pre></td></tr></table></figure></li>
+<li>Result Images<table>
+<thead>
+<tr>
+<th align="center">Original</th>
+<th align="center">Rotated</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80axe2b1j30u00um0xa.jpg width=30%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx811degesj30rt0sa42g.jpg width=30%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<ul>
+<li><p><strong>Affine Mapping</strong></p>
+<ul>
+<li><p>Key Codes</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">rows, cols = img.shape[0:2]</span><br><span class="line">pts_src = np.float32([[50, 300], [150, 200], [50, 50]])</span><br><span class="line">pts_dst = np.float32([[50, 200], [250, 200], [50, 100]])</span><br><span class="line">T = cv.getAffineTransform(pts_src, pts_dst)</span><br><span class="line">img_affine = cv.warpAffine(img, T, (cols, rows))</span><br><span class="line"></span><br><span class="line"># Draw triangle on source and transformed images</span><br><span class="line">cv.polylines(img, [pts_src.astype(np.int32)], True, (0, 0, 0), 1)</span><br><span class="line">cv.polylines(img_affine, [pts_dst.astype(np.int32)], True, (0, 0, 0), 1)</span><br><span class="line"></span><br><span class="line"># Show source and transformed images</span><br><span class="line">cv.imshow(&quot;Source&quot;, img)</span><br><span class="line">cv.imshow(&quot;Transform&quot;, img_affine)</span><br></pre></td></tr></table></figure></li>
+<li><p>Result Images</p>
+<table>
+<thead>
+<tr>
+<th align="center">Original</th>
+<th align="center">Affine mapped</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx81481tbaj30ru0s9ae5.jpg width=30%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx813yq2ewj30ru0j8jtx.jpg width=30%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p><strong>Bevel</strong></p>
+<ul>
+<li>Key Codes<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rows, cols = img.shape[0:2]</span><br><span class="line">s = 0.8</span><br><span class="line">T = np.float32([[1, s, 0], (0, 1, 0)])</span><br><span class="line">img_bevel = cv.warpAffine(img, T, (cols, rows))</span><br><span class="line">cv.imshow(&quot;Bevel&quot;, img_bevel)</span><br></pre></td></tr></table></figure></li>
+<li>Result Images<table>
+<thead>
+<tr>
+<th align="center">Original</th>
+<th align="center">Bevel mapped</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80axe2b1j30u00um0xa.jpg width=30%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx81824mwjj30ru0saq5d.jpg width=30%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<ul>
+<li><p><strong>Piecewise-Linear Mapping</strong></p>
+<ul>
+<li><p>Key Codes</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">stretch = 2</span><br><span class="line">T = np.float32([[stretch, 0, 0], [0, 1, 0]])</span><br><span class="line">rows, cols = img.shape[0:2]</span><br><span class="line">img_plm = img.copy()</span><br><span class="line">img_plm[:, int(cols / 2):, :] = cv.warpAffine(img_plm[:, int(cols / 2):, :], T, (cols - int(cols / 2), rows))</span><br><span class="line">cv.imshow(&quot;Piecewise-Linear&quot;, img_plm)</span><br></pre></td></tr></table></figure></li>
+<li><p>Result Images</p>
+<table>
+<thead>
+<tr>
+<th align="center">Original</th>
+<th align="center">Piecewise-Linear mapped</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80axe2b1j30u00um0xa.jpg width=30%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx81c2qwevj30rw0s9n0x.jpg width=30%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p><strong>Projection Mapping</strong>    </p>
+<ul>
+<li><p>Key Codes</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">rows, cols = img.shape[0:2]</span><br><span class="line">pts_src = np.float32([[50, 461], [461, 461], [461, 50], [50, 50]])</span><br><span class="line">pts_dst = np.float32([[50, 461], [461, 440], [450, 10], [100, 50]])</span><br><span class="line"># T = cv.getPerspectiveTransform(pts_src, pts_dst)</span><br><span class="line">T = np.float32([[1.1, 0.2, 0.00075], [0.35, 1.1, 0.0005], [0, 0, 1]])</span><br><span class="line">img_persp = cv.warpPerspective(img, T, (cols * 2, rows * 2))</span><br><span class="line"></span><br><span class="line"># Draw rectangles on source and transformed images</span><br><span class="line">cv.polylines(img, [pts_src.astype(np.int32)], True, (0, 0, 0), 1)</span><br><span class="line">for i in range(4):</span><br><span class="line">    src = np.float32([pts_src[i, 0], pts_src[i, 1], 1])</span><br><span class="line">    pts_dst[i] = np.matmul(T[0:2, :], src) / np.matmul(T[2, :], src)</span><br><span class="line">cv.polylines(img_persp, [pts_dst.astype(np.int32)], True, (0, 0, 0), 1)</span><br><span class="line"></span><br><span class="line"># Show source and transformed images</span><br><span class="line">cv.imshow(&quot;Source&quot;, img)</span><br><span class="line">cv.imshow(&quot;Projection&quot;, img_persp)</span><br></pre></td></tr></table></figure></li>
+<li><p>Result Images</p>
+<table>
+<thead>
+<tr>
+<th align="center">Original</th>
+<th align="center">Projection mapped</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx81do6m79j30rv0sddjz.jpg width=30%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx81dsfxomj30qx0q80un.jpg width=30%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p><strong>Polynomial Mapping</strong></p>
+<ul>
+<li>Key Codes<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># rows, cols = img.shape[0:2]</span><br><span class="line">T = np.array([[0, 0], [1, 0], [0, 1], [0.00001, 0], [0.002, 0], [0.001, 0]])</span><br><span class="line"></span><br><span class="line"># Create destination image</span><br><span class="line">img_poly = np.zeros(img.shape, img.dtype)</span><br></pre></td></tr></table></figure></li>
+<li>Result Images<table>
+<thead>
+<tr>
+<th align="center">Original</th>
+<th align="center">Polynomial mapped</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx81do6m79j30rv0sddjz.jpg width=30%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx81oah4r4j30s00sitfp.jpg width=30%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<ul>
+<li><p><strong>Sinusoidal Distortion</strong></p>
+<ul>
+<li><p>Key Codes</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Create mesh grid for X, Y coordinates</span><br><span class="line">rows, cols = img.shape[0:2]</span><br><span class="line">x, y = np.meshgrid(np.arange(cols), np.arange(rows))</span><br><span class="line"></span><br><span class="line">x = x + 20 * np.sin(2 * math.pi * y / 90)</span><br><span class="line"></span><br><span class="line">img_sin = cv.remap(img, x.astype(np.float32), y.astype(np.float32), cv.INTER_LINEAR)</span><br><span class="line"></span><br><span class="line">cv.imshow(&quot;Sinusoidal&quot;, img_sin)</span><br></pre></td></tr></table></figure></li>
+<li><p>Result Images</p>
+<table>
+<thead>
+<tr>
+<th align="center">Original</th>
+<th align="center">Sinusoidal Distorted</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx81do6m79j30rv0sddjz.jpg width=30%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx81pmy9i9j30rw0s7q76.jpg width=30%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<ul>
+<li><strong>Barrel Distortion</strong><ul>
+<li><p>Key Codes</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># Create mesh grid for X, Y coordinates</span><br><span class="line">rows, cols = img.shape[0:2]</span><br><span class="line">x, y = np.meshgrid(np.arange(cols), np.arange(rows))</span><br><span class="line"></span><br><span class="line"># Shift and normalize grid</span><br><span class="line">x_mid = cols / 2.0</span><br><span class="line">y_mid = rows / 2.0</span><br><span class="line">x = x - x_mid</span><br><span class="line">y = y - y_mid</span><br><span class="line"></span><br><span class="line"># Convert to polar and do transformation</span><br><span class="line">r, theta = cv.cartToPolar(x / x_mid, y / y_mid)</span><br><span class="line">F3 = 0.1</span><br><span class="line"># F3 = -0.003</span><br><span class="line">F5 = 0.12</span><br><span class="line">r = r + F3 * r ** 3 + F5 * r ** 5</span><br><span class="line"># r = r + F3 * r ** 2</span><br><span class="line"># F1 = 0.0</span><br><span class="line"></span><br><span class="line"># Undo conversion, normalization and shift</span><br><span class="line">u, v = cv.polarToCart(r, theta)</span><br><span class="line">u = u * x_mid + x_mid</span><br><span class="line">v = v * y_mid + y_mid</span><br><span class="line"></span><br><span class="line">img_dist = cv.remap(img, u.astype(np.float32), v.astype(np.float32), cv.INTER_LINEAR)</span><br><span class="line"></span><br><span class="line">cv.imshow(&quot;Distorted&quot;, img_dist)</span><br></pre></td></tr></table></figure></li>
+<li><p>Result Images</p>
+<table>
+<thead>
+<tr>
+<th align="center">Original</th>
+<th align="center">Barrel Distorted</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx81do6m79j30rv0sddjz.jpg width=30%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx81tiqsjcj30ru0s8q62.jpg width=30%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<ul>
+<li><p><strong>Correction</strong></p>
+<ul>
+<li><p>Key Codes</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"># Calculate the background transformation coefficients</span><br><span class="line">d = 5  # Maximum degree</span><br><span class="line">max_r = 1.3  # Maximum value for the pts array</span><br><span class="line">pts = (np.arange(d, dtype=np.float32) + 1) / d * max_r</span><br><span class="line">pts2 = pts + F3 * pts ** 3 + F5 * pts ** 5</span><br><span class="line"></span><br><span class="line"># Create and fill matrix</span><br><span class="line">T = np.zeros((d, d))</span><br><span class="line">for i in range(d):</span><br><span class="line">    T[:, i] = pts2 ** (i + 1)</span><br><span class="line"></span><br><span class="line"># Invert it and calculate coefficients</span><br><span class="line">T = np.linalg.inv(T)</span><br><span class="line">F = np.matmul(T, pts)</span><br><span class="line"></span><br><span class="line"># Do transformation in polar CS</span><br><span class="line">r, theta = cv.cartToPolar(x / x_mid, y / y_mid)</span><br><span class="line">rt = 0</span><br><span class="line">for i in range(d):</span><br><span class="line">    rt = rt + F[i] * r ** (i + 1)</span><br><span class="line">r = rt</span><br><span class="line"></span><br><span class="line">u, v = cv.polarToCart(r, theta)</span><br><span class="line">u = u * x_mid + x_mid</span><br><span class="line">v = v * y_mid + y_mid</span><br><span class="line"></span><br><span class="line">img_corr = cv.remap(img_dist, u.astype(np.float32), v.astype(np.float32), cv.INTER_LINEAR)</span><br><span class="line"></span><br><span class="line">cv.imshow(&quot;Correct&quot;, img_corr)</span><br></pre></td></tr></table></figure></li>
+<li><p>Result Images</p>
+<table>
+<thead>
+<tr>
+<th align="center">Original</th>
+<th align="center">Distorted</th>
+<th align="center">Corrected</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx81do6m79j30rv0sddjz.jpg width=30%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx81tiqsjcj30ru0s8q62.jpg width=30%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx81do6m79j30rv0sddjz.jpg width=30%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<ul>
+<li><p><strong>Stitch Manually</strong></p>
+<ul>
+<li><p>Key Codes</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">fn_top = &quot;/Users/stone/PycharmProjects/image_processing/lab1_python/top_4.jpg&quot;</span><br><span class="line">fn_bot = &quot;/Users/stone/PycharmProjects/image_processing/lab1_python/bot_4.jpg&quot;</span><br><span class="line"></span><br><span class="line"># Read image from files</span><br><span class="line">img_top = cv.imread(fn_top, cv.IMREAD_COLOR)</span><br><span class="line">utils.check_error(img_top, fn_top)</span><br><span class="line">img_bot = cv.imread(fn_bot, cv.IMREAD_COLOR)</span><br><span class="line">utils.check_error(img_bot, fn_bot)</span><br><span class="line"></span><br><span class="line"># Show parts of image</span><br><span class="line">cv.destroyAllWindows()</span><br><span class="line">cv.imshow(&quot;Top&quot;, img_top)</span><br><span class="line">cv.imshow(&quot;Bottom&quot;, img_bot)</span><br><span class="line"></span><br><span class="line"># Match template</span><br><span class="line">templ_size = 10</span><br><span class="line">templ = img_top[-templ_size:, :, :]</span><br><span class="line">res = cv.matchTemplate(img_bot, templ, cv.TM_CCOEFF)</span><br><span class="line">min_val, max_val, min_loc, max_loc = cv.minMaxLoc(res)</span><br><span class="line"></span><br><span class="line"># Stitch images</span><br><span class="line"># change to :1003 since the width has been changed by accident while splitting images</span><br><span class="line">img_stitch = np.zeros((img_top.shape[0] + img_bot.shape[0] - max_loc[1] - templ_size, img_top.shape[1], img_top.shape[2]), dtype=np.uint8)</span><br><span class="line">img_stitch[0:img_top.shape[0], :, :] = img_top</span><br><span class="line">img_stitch[img_top.shape[0]:, :, :] = img_bot[max_loc[1] + templ_size:, :1003, :]</span><br><span class="line"></span><br><span class="line"># Show stitched image</span><br><span class="line">cv.imshow(&quot;Stitch&quot;, img_stitch)</span><br></pre></td></tr></table></figure></li>
+<li><p>Result Images</p>
+<table>
+<thead>
+<tr>
+<th align="center">Stitch up</th>
+<th align="center">Stitch down</th>
+<th align="center">Stitched</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80axe2b1j30u00um0xa.jpg width=40%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80clvcl2j30ry0wjafg.jpg width=40%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx82hsbhmnj30on12gdki.jpg width=40%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p><strong>Stitcher</strong></p>
+<ul>
+<li><p>Key Codes</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">fn_top = &quot;/Users/stone/PycharmProjects/image_processing/lab1_python/top_4.jpg&quot;</span><br><span class="line">fn_bot = &quot;/Users/stone/PycharmProjects/image_processing/lab1_python/bot_4.jpg&quot;</span><br><span class="line"></span><br><span class="line"># Read image from files</span><br><span class="line">img_top = cv.imread(fn_top, cv.IMREAD_COLOR)</span><br><span class="line">utils.check_error(img_top, fn_top)</span><br><span class="line">img_bot = cv.imread(fn_bot, cv.IMREAD_COLOR)</span><br><span class="line">utils.check_error(img_bot, fn_bot)</span><br><span class="line"></span><br><span class="line"># Show parts of image</span><br><span class="line">cv.destroyAllWindows()</span><br><span class="line">cv.imshow(&quot;Top&quot;, img_top)</span><br><span class="line">cv.imshow(&quot;Bottom&quot;, img_bot)</span><br><span class="line"></span><br><span class="line"># Stitch</span><br><span class="line">stitcher = cv.Stitcher.create(cv.Stitcher_SCANS)</span><br><span class="line">status, img_stitch = stitcher.stitch([img_top, img_bot])</span><br><span class="line"></span><br><span class="line"># Show stitched image in case of success</span><br><span class="line">if status is cv.Stitcher_OK:</span><br><span class="line">    cv.imshow(&quot;Stitch&quot;, img_stitch)</span><br></pre></td></tr></table></figure></li>
+<li><p>Result Images</p>
+<table>
+<thead>
+<tr>
+<th align="center">Stitch up</th>
+<th align="center">Stitch down</th>
+<th align="center">Stitched</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80axe2b1j30u00um0xa.jpg width=40%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx80clvcl2j30ry0wjafg.jpg width=40%></td>
+<td align="center"><img src=https://tva1.sinaimg.cn/large/008i3skNly1gx82hsbhmnj30on12gdki.jpg width=40%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<h3 id="mathbb-Conclusion"><a href="#mathbb-Conclusion" class="headerlink" title="$\mathbb{Conclusion}$"></a>$\mathbb{Conclusion}$</h3><ul>
+<li>During Lab2, some methods like shift, scale, polynomial are simple geometric transformations. </li>
+<li>And another methods such as sinusoidal distortion and barrel distortion are the easiest way to understand the defination of distortion. Via implementing these, a better understanding of distortion correction will be got. </li>
+<li>Methods implemented in stitching has some limit while being used: the subimages should have enough part in common, otherwise the stitching maybe fail.</li>
+</ul>
+<h3 id="mathbb-Answers"><a href="#mathbb-Answers" class="headerlink" title="$\mathbb{Answers}$"></a>$\mathbb{Answers}$</h3><ol>
+<li><p>How can you rotate an image without using a rotation matrix?</p>
+<ul>
+<li>Via method <code>rotate(src, rotateCode, dst)</code> prebuilt in OpenCV.</li>
+</ul>
+</li>
+<li><p>What is the minimum number of corresponding pairs of points that must be specified on the original and distorted images, if the transformation order 𝑛 = 4?<br>$$Number_{minimum}\space=\space\frac{(n+1)(n+2)}{2}\space=\space 15$$</p>
+</li>
+<li><p>After geometric transformation of the image, pixels with undefined intensity values may appear. What is the reason for this and how is this problem solved?</p>
+<ul>
+<li>Reason<br>  <br> While processing image, it will transformed into array. And after processing, the new array size maybe larger than the original array. <br> And random value will be filled in these additional space. Thus comes undefined intensity.</li>
+<li>Solution<br>  <br> We can specify the filled value to 0, which is black in color. Or we can resize the new array into appereciate size.</li>
+</ul>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">HDU-ITMO</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/01/04/Image-processing-Lab2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Image-processing-Lab-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/01/04/Image-processing-Lab-1/">Image processing Lab 1</a>
+    </h1>
+  
+
+        
+        <a href="/2022/01/04/Image-processing-Lab-1/" class="archive-article-date">
+  	<time datetime="2022-01-04T13:00:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
+</script>
+
+<h1> <center> Image Processing </center> </h1>
+
+<h2 id="mathbf-Lab-space-No1"><a href="#mathbf-Lab-space-No1" class="headerlink" title=" $\mathbf{Lab\space No1}$ "></a><center> $\mathbf{Lab\space No1}$ </center></h2><p><em><h3> $\mathbb{Student\space Info}$ </h3></em><br><strong><center> Name: Xiao Shitong <br> HDU ID: 19321123 <br>ITMO ID: 293647</center></strong></p>
+<div STYLE="page-break-after: always;"></div>
+
+<h3 id="mathbb-Task"><a href="#mathbb-Task" class="headerlink" title="$\mathbb{Task}$"></a>$\mathbb{Task}$</h3><h4 id="mathbb-Purpose"><a href="#mathbb-Purpose" class="headerlink" title="$\mathbb{Purpose}$"></a>$\mathbb{Purpose}$</h4><p><em>Digital images basic brightness and geometric characteristics studying and using it for image analysis.</em></p>
+<h4 id="mathbb-Theory"><a href="#mathbb-Theory" class="headerlink" title="$\mathbb{Theory}$"></a>$\mathbb{Theory}$</h4><p><em>There are many ways for histogram equalization which are listed below</em></p>
+<ol>
+<li><p><strong>Image Histogram</strong><br>$$ I = calcHist(image) $$<br>Where $calcHist$ is the internal function of OpenCV returning the number of pixels whose brightness is $i$.</p>
+</li>
+<li><p><strong>Linear Equalization</strong><br>$$ lut = \frac{\sum_{t=0}^i {Hist(m)}}{w \cdot h} \cdot 255 $$<br>Where $255$ is the enlarger constant to enlarge the contrast.</p>
+</li>
+<li><p><strong>Dynamic Range Stretching</strong><br>$$ I_{new} = (\frac{I - I_{new}}{I_{max} - I_{min}})^{\alpha} $$ <br> Where the $ I_{max}, I_{min}$ are the maximum and minimum intensity values arrays of the original image; ${\alpha}$ is the nonlinearity coefficient.</p>
+</li>
+<li><p><strong>Uniform Transformation</strong><br>$$ I_{new} = (I_{max} - I_{min}) \cdot P(I) + I_{min} $$ <br>Where $P(I) \approx \sum_{m=0}^{i}Hist(m) $ is the probability function of original image.</p>
+</li>
+<li><p><strong>Exponential Transformation</strong><br>$$ I_{new} = I_{min} - \frac{1}{\alpha} \cdot \ln (1 - P(I))$$ <br> Where ${\alpha}$ is the constant characterizes transformation slope.</p>
+</li>
+<li><p><strong>Rayleigh Transformation</strong><br>$$ I_{new} = I_{min} + (2\cdot\alpha^2\cdot\ln(\frac{1}{1 - P(I)}))^{\frac{1}{2}} $$ <br> Where $\alpha$ is the constant characterizing the histogram of the resulting image elements intensity distribution.</p>
+</li>
+<li><p><strong>Transformation of 2/3-degree</strong><br>$$I_{new} = P(I)^{\frac{2}{3}}$$</p>
+</li>
+<li><p><strong>Hyperbolic Transformation</strong><br>$$ I_{new} = \alpha^{P(I)} $$ <br> Where $\alpha$ is the constant relative to which the transformation is carried out.</p>
+</li>
+<li><p><strong>Image Profile</strong></p>
+<ul>
+<li><em>Row Profile</em><br>$$Profile i(x) = I(x, i)$$</li>
+<li><em>Column Profile</em><br>$$Profile j(y) = I(j, y)$$</li>
+</ul>
+</li>
+<li><p><strong>Image Projection</strong></p>
+<ul>
+<li><em>Vertical Projection</em><br>$$ProjX(y) = \sum_{y=0}^{dim Y - 1}\cdot I(x, y)$$</li>
+<li><em>Horizontal Projection</em><br>$$ProjY(x) = \sum_{x=0}^{dim X - 1}\cdot I(x, y)$$</li>
+</ul>
+</li>
+</ol>
+<div STYLE="page-break-after: always;"></div>
+
+
+<h4 id="mathbb-Assignment-space-Progress"><a href="#mathbb-Assignment-space-Progress" class="headerlink" title="$\mathbb{Assignment\space Progress}$"></a>$\mathbb{Assignment\space Progress}$</h4><h5 id="mathbb-Original-space-Images"><a href="#mathbb-Original-space-Images" class="headerlink" title="$\mathbb{Original\space Images}$"></a>$\mathbb{Original\space Images}$</h5><table>
+<thead>
+<tr>
+<th align="center">Image_RGB</th>
+<th align="center">Image_Gray</th>
+<th align="center">Barcode</th>
+<th align="center">Text</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwr9whs8bdj30kq0m6gok.jpg" width=60%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsn6l133pj30sg0u4n03.jpg" width=45%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwrcl3r5j6j31240je0v2.jpg" width=60%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwslpi0xhoj30f402wgll.jpg"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<h5 id="mathbb-Code-space-and-space-Result-space-Images"><a href="#mathbb-Code-space-and-space-Result-space-Images" class="headerlink" title="$\mathbb{Code\space and\space Result\space Images}$"></a>$\mathbb{Code\space and\space Result\space Images}$</h5><ul>
+<li><p><strong>Image Histogram</strong></p>
+<ul>
+<li>Key Codes of Scripts with Comments<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># Split image into layers</span><br><span class="line">bgr_planes = cv.split(image)</span><br><span class="line"></span><br><span class="line"># Calculate histogram</span><br><span class="line">hist_b = cv.calcHist(bgr_planes, [0], None, [256], [0, 256])</span><br><span class="line">hist_g = cv.calcHist(bgr_planes, [1], None, [256], [0, 256])</span><br><span class="line">hist_r = cv.calcHist(bgr_planes, [2], None, [256], [0, 256])</span><br><span class="line"></span><br><span class="line"># Show histogram</span><br><span class="line">hist_img = np.full((256, 512, 3), 255, dtype=np.uint8)</span><br><span class="line">hist_scale = np.max([hist_b.max(), hist_g.max(), hist_r.max()])</span><br><span class="line">draw_graph(hist_img, hist_b, (255, 0, 0), hist_scale)</span><br><span class="line">draw_graph(hist_img, hist_g, (0, 255, 0), hist_scale)</span><br><span class="line">draw_graph(hist_img, hist_r, (0, 0, 255), hist_scale)</span><br><span class="line">cv.imshow(&quot;Histogram RGB&quot;, hist_img)</span><br></pre></td></tr></table></figure></li>
+<li>Resulting Images</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Image_RGB</th>
+<th align="center">Histogram_RGB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsngn1svwj30se0u40xo.jpg" width=30%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsngs83bkj30si0fs75k.jpg" width=50%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<ul>
+<li><p><strong>Linear Equalization</strong></p>
+<ul>
+<li>Key Codes of Scripts with Comments<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Calculate histogram</span><br><span class="line">hist = cv.calcHist([image], [0], None, [256], [0, 256])</span><br><span class="line"></span><br><span class="line"># Calculate Cumulative histogram</span><br><span class="line">cum_hist = np.cumsum(hist) / image.shape[0] / image.shape[1]</span><br><span class="line"></span><br><span class="line"># Linear equalization</span><br><span class="line">lut = (255 * cum_hist).clip(0, 255).astype(np.uint8)</span><br></pre></td></tr></table></figure></li>
+<li>Resulting Images</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Image</th>
+<th align="center">Histogram</th>
+<th align="center">Img after LE</th>
+<th align="center">Histogram after LE</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsn6l133pj30sg0u4n03.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsnsz5mprj30sg0fuaar.jpg" width=70%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsntpew31j30se0twq6r.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsnu5y7a8j30sg0fsq3y.jpg" width=70%></td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>Dynamic Range Stretching</strong></p>
+<ul>
+<li>Key Codes of Scripts with Comments<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Calculate min and max values of an image</span><br><span class="line">i_min = image.min()</span><br><span class="line">i_max = image.max()</span><br><span class="line"></span><br><span class="line"># Nonlinear dynamic range stretching</span><br><span class="line">alpha = 0.5</span><br><span class="line">lut = np.arange(256, dtype=np.float32)</span><br><span class="line">lut = np.power(((lut - i_min) / (i_max - i_min)).clip(0, 1), alpha)</span><br><span class="line">lut = (255 * lut).astype(np.uint8)</span><br></pre></td></tr></table></figure></li>
+<li>Resulting Images</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Image</th>
+<th align="center">Histogram</th>
+<th align="center">Img after DRS</th>
+<th align="center">Histogram after DRS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsn6l133pj30sg0u4n03.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsnsz5mprj30sg0fuaar.jpg" width=70%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsnzm3lu4j30se0u0jud.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsnzh3pcfj30sk0fu0tj.jpg" width=70%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<ul>
+<li><p><strong>Uniform Transformation</strong></p>
+<ul>
+<li>Key Codes of Scripts with Comments<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Uniform transformation</span><br><span class="line">lut = (i_max - i_min) * cum_hist + i_min</span><br><span class="line">lut = lut.clip(0, 255).astype(np.uint8)</span><br></pre></td></tr></table></figure></li>
+<li>Resulting Images</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Image</th>
+<th align="center">Histogram</th>
+<th align="center">Img after UT</th>
+<th align="center">Histogram after UT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsn6l133pj30sg0u4n03.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsnsz5mprj30sg0fuaar.jpg" width=70%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwso2fxzycj30si0tutc6.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwso2kfmqaj30si0fsaaz.jpg" width=70%></td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>Exponential Transformation</strong></p>
+<ul>
+<li>Key Codes of Scripts with Comments<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Exponential transformation</span><br><span class="line">alpha = 8</span><br><span class="line">lut = i_min / 255.0 - 1 / alpha * np.log(1 - cum_hist)</span><br><span class="line">lut = (255 * lut).clip(0, 255).astype(np.uint8)</span><br></pre></td></tr></table></figure></li>
+<li>Resulting Images</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Image</th>
+<th align="center">Histogram</th>
+<th align="center">Img after ET</th>
+<th align="center">Histogram after ET</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsn6l133pj30sg0u4n03.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsnsz5mprj30sg0fuaar.jpg" width=70%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwso4zsrfgj30sk0tsgnw.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwso522oqbj30sk0fq3z3.jpg" width=70%></td>
+</tr>
+</tbody></table>
+<div STYLE="page-break-after: always;"></div></li>
+<li><p><strong>Rayleigh Transformation</strong></p>
+<ul>
+<li>Key Codes of Scripts with Comments<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Rayleigh transformation</span><br><span class="line">alpha = 0.3</span><br><span class="line">lut = i_min / 255 + 1 - np.sqrt(-2 * alpha * alpha / np.log(1 - cum_hist))</span><br><span class="line">lut = (lut * 255).clip(0, 255).astype(np.uint8)</span><br></pre></td></tr></table></figure></li>
+<li>Resulting Images</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Image</th>
+<th align="center">Histogram</th>
+<th align="center">Img after RT</th>
+<th align="center">Histogram after RT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsn6l133pj30sg0u4n03.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsnsz5mprj30sg0fuaar.jpg" width=70%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwso7j59n8j30s80ty0wc.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwso7c8b9dj30si0fuq3j.jpg" width=70%></td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>Transformation of 2/3-degree</strong></p>
+<ul>
+<li>Key Codes of Scripts with Comments<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 2/3 degree transformation</span><br><span class="line">lut = np.power(cum_hist, 2.0 / 3)</span><br><span class="line">lut = (lut * 255).clip(0, 255).astype(np.uint8)</span><br></pre></td></tr></table></figure></li>
+<li>Resulting Images</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Image</th>
+<th align="center">Histogram</th>
+<th align="center">Img after LUT</th>
+<th align="center">Histo after LUT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsn6l133pj30sg0u4n03.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsnsz5mprj30sg0fuaar.jpg" width=70%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsoqgq0lkj30sc0tytcd.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsoqj3f05j30sg0fomy3.jpg" width=70%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<ul>
+<li><p><strong>Hyperbolic Transformation</strong></p>
+<ul>
+<li>Key Codes of Scripts with Comments<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Hyperbolic transformation</span><br><span class="line">alpha = 0.04</span><br><span class="line">alpha = i_min / 255.0</span><br><span class="line">lut = np.power(alpha, cum_hist)</span><br><span class="line">lut = (lut * 255).clip(0, 255).astype(np.uint8)</span><br></pre></td></tr></table></figure></li>
+<li>Resulting Images</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Image</th>
+<th align="center">Histogram</th>
+<th align="center">Img after LUT</th>
+<th align="center">Histogram after LUT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsn6l133pj30sg0u4n03.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsnsz5mprj30sg0fuaar.jpg" width=70%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwso4zsrfgj30sk0tsgnw.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsry2vn58j30sg0fqdgp.jpg" width=70%></td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>OpenCV equalizeHist</strong></p>
+<ul>
+<li>Key Codes of Scripts with Comments<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">image_eq = cv.equalizeHist(image)</span><br><span class="line">cv.imshow(&quot;Image after equalizeHist&quot;, image_eq)</span><br><span class="line"></span><br><span class="line"># Calculate histogram after equalizeHist </span><br><span class="line">hist_eq = cv.calcHist([image_eq], [0], None, [256], [0, 256])</span><br><span class="line"></span><br><span class="line"># Calculate cumulative histogram after equalizeHist</span><br><span class="line">cum_hist_eq = np.cumsum(hist_eq) / image.shape[0] / image.shape[1]</span><br><span class="line"></span><br><span class="line"># Show histogram after equalizeHist</span><br><span class="line">hist_eq_img = np.full((256, 512, 3), 255,  dtype=np.uint8)</span><br><span class="line">draw_hist(hist_eq_img, hist_eq, (127, 127, 127), hist_eq.max())</span><br><span class="line">draw_graph(hist_eq_img, cum_hist_eq, (0, 0, 0), 1)</span><br><span class="line">cv.imshow(&quot;Histogram after equalizeHist&quot;, hist_eq_img)</span><br></pre></td></tr></table></figure></li>
+<li>Resulting Images</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Image after LE</th>
+<th align="center">Histogram after LE</th>
+<th align="center">Img after equalize</th>
+<th align="center">Histogram after equalize</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwss7iw4mgj30sa0tygpe.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwss7dhgt4j30si0fudgw.jpg" width=70%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwss5xgiohj30si0u0n12.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwss5q6ogkj30sk0fw3zl.jpg" width=70%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<ul>
+<li><p><strong>OpenCV createCLAHE</strong></p>
+<ul>
+<li>Key Codes of Scripts with Comments<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">clahe = cv.createCLAHE()</span><br><span class="line">clahe.setClipLimit(4)</span><br><span class="line">image_clahe = clahe.apply(image)</span><br><span class="line">cv.imshow(&quot;Image after CLAHE&quot;, image_clahe)</span><br><span class="line"></span><br><span class="line"># Calculate histogram after createCLAHE</span><br><span class="line">hist_clahe = cv.calcHist([image_clahe], [0], None, [256], [0, 256])</span><br><span class="line"></span><br><span class="line"># Calculate cumulative histogram after createCLAHE</span><br><span class="line">cum_hist_clahe = np.cumsum(hist_clahe) / image.shape[0] / image.shape[1]</span><br><span class="line"></span><br><span class="line"># Show histogram after createCLAHE</span><br><span class="line">hist_clahe_img = np.full((256, 512, 3), 255, dtype=np.uint8)</span><br><span class="line">draw_hist(hist_clahe_img, hist_clahe, (127, 127, 127), hist_clahe.max())</span><br><span class="line">draw_graph(hist_clahe_img, cum_hist_clahe, (0, 0, 0), 1)</span><br><span class="line">cv.imshow(&quot;Histogram after CLAHE&quot;, hist_clahe_img)</span><br></pre></td></tr></table></figure></li>
+<li>Resulting Images</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Image after LE</th>
+<th align="center">Histogram after LE</th>
+<th align="center">Img after CLAHE</th>
+<th align="center">Histogram after CLAHE</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsntpew31j30se0twq6r.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsnu5y7a8j30sg0fsq3y.jpg" width=70%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwssc9r0ftj30sg0u0dkb.jpg" width=40%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwssbjqldcj30si0fujs0.jpg" width=70%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<ul>
+<li><p><strong>Image Profile</strong></p>
+<ul>
+<li>Key Codes of Scripts with Comments<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># Read an image from file</span><br><span class="line">filename = &quot;/Users/stone/PycharmProjects/image_processing/lab1_python/my_barcode.png&quot;</span><br><span class="line">image = cv.imread(filename, cv.IMREAD_GRAYSCALE)</span><br><span class="line">check_none(image)</span><br><span class="line"></span><br><span class="line"># Show original image</span><br><span class="line">cv.imshow(&quot;Image&quot;, image)</span><br><span class="line"></span><br><span class="line"># Get profile</span><br><span class="line">if image.ndim == 2:</span><br><span class="line">    profile = image[round(image.shape[0] / 2), :]</span><br><span class="line">else:</span><br><span class="line">    profile = image[round(image.shape[0] / 2), :, :]</span><br><span class="line"></span><br><span class="line"># Create profile graph image</span><br><span class="line">profile_img = np.full((256, image.shape[1], 3), 255, dtype=np.uint8)</span><br><span class="line">if image.ndim == 2:</span><br><span class="line">    draw_graph(profile_img, profile, (0, 0, 0), profile.max())</span><br><span class="line">else:</span><br><span class="line">    draw_graph(profile_img, profile[:, 0], (255, 0, 0), profile.max())</span><br><span class="line">    draw_graph(profile_img, profile[:, 1], (0, 255, 0), profile.max())</span><br><span class="line">    draw_graph(profile_img, profile[:, 1], (0, 0, 255), profile.max())</span><br><span class="line">cv.imshow(&quot;Profile&quot;, profile_img)</span><br></pre></td></tr></table></figure></li>
+<li>Resulting Images</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Barcode</th>
+<th align="center">Profile</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwrcl3r5j6j31240je0v2.jpg" width=60%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwssj6p3mqj31gc08omyk.jpg"></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<ul>
+<li><p><strong>Image Projection</strong></p>
+<ul>
+<li>Key Codes of Scripts with Comments<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"># Read an image from file</span><br><span class="line">filename = &quot;/Users/stone/PycharmProjects/image_processing/lab1_python/my_text.png&quot;</span><br><span class="line">img = cv.imread(filename)</span><br><span class="line">check_none(img)</span><br><span class="line"></span><br><span class="line"># Show image</span><br><span class="line">cv.imshow(&quot;Text&quot;, img)</span><br><span class="line"></span><br><span class="line">if img.ndim == 2:</span><br><span class="line">    proj_x = np.sum(img, 0) / 255</span><br><span class="line">    proj_y = np.sum(img, 1) / 255</span><br><span class="line">else:</span><br><span class="line">    proj_x = np.sum(img, (0, 2)) / 255 / img.shape[2]</span><br><span class="line">    proj_y = np.sum(img, (1, 2)) / 255 / img.shape[2]</span><br><span class="line"></span><br><span class="line"># Create X projection graph image</span><br><span class="line">proj_x_img = np.full((256, img.shape[1], 3), 255, dtype=np.uint8)</span><br><span class="line">draw_graph(proj_x_img, proj_x, (0, 0, 0), proj_x.max())</span><br><span class="line"></span><br><span class="line"># Create Y projection graph image</span><br><span class="line">proj_y_img = np.full((256, img.shape[0], 3), 255, dtype=np.uint8)</span><br><span class="line">draw_graph(proj_y_img, proj_y, (0, 0, 0), proj_y.max())</span><br><span class="line">proj_y_img = cv.transpose(proj_y_img)</span><br><span class="line">proj_y_img = cv.flip(proj_y_img, 1)</span><br><span class="line"></span><br><span class="line"># And show them</span><br><span class="line">cv.imshow(&quot;Projection to Ox&quot;, proj_x_img)</span><br><span class="line">cv.imshow(&quot;Projection to Oy&quot;, proj_y_img)</span><br></pre></td></tr></table></figure></li>
+<li>Resulting Images</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Text</th>
+<th align="center">Projection to Oy</th>
+<th align="center">Projection to Ox</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwssowjrx4j30ua07cwew.jpg"></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwssrbjugcj30ea07aq2y.jpg"></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwssrvxb07j30u80fmgm9.jpg" width=55%></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<h5 id="mathbb-Conclusion"><a href="#mathbb-Conclusion" class="headerlink" title="$\mathbb{Conclusion}$"></a>$\mathbb{Conclusion}$</h5><p>During Lab1, many methods are implemented to process the images.</p>
+<ul>
+<li><p>Histogram Equalization<br>  There are many implements for histogram equalization, and they can all enhance the contrast and make dull images clarity. </p>
+<p>  For different methods are used in different situations. For example, linear equalization is the most effective and easiest way to enhance the contrast. But if one image has lots of noise, LE algorithm will enhance these noise points either. Thus, we develop the CLAHE algorithms to enhance a little piece of the whole image which can avoid noise enhancement.</p>
+</li>
+<li><p>Image Profile<br>  Image profile can show the luminance of the pixels along a line segment or multi-line path in an image.</p>
+<p>  During Lab1, this property is used to detect the bar width, which means the number of a barcode image.</p>
+</li>
+<li><p>Image Projection<br>  Image Projection can project the image onto one particular line.</p>
+<p>  During Lab1, this property is only used to detect the text area in an image. But it can be used in other fields, such as tomography.</p>
+</li>
+</ul>
+<div STYLE="page-break-after: always;"></div>
+
+<h3 id="mathbb-Answers"><a href="#mathbb-Answers" class="headerlink" title="$\mathbb{Answers}$"></a>$\mathbb{Answers}$</h3><h4 id="mathbb-Contrast"><a href="#mathbb-Contrast" class="headerlink" title="$\mathbb{Contrast}$"></a>$\mathbb{Contrast}$</h4><ol>
+<li><p><strong>Defination</strong></p>
+<p>Contrast is the scale of difference between black and white in an image. With the low contrast, the image can be called as “dull”.  With the high contrast, the image can be called as “clarity”.</p>
+<table>
+<thead>
+<tr>
+<th align="center">dull (low contrast)</th>
+<th align="center">clarity (high contrast)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsyl76jk8j30bt08agmd.jpg" width=50%></td>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/008i3skNly1gwsyln8bfgj30bw08a75e.jpg" width=50%></td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>Change Contrast</strong></p>
+<p> A series of methods can be implemented to change contrast. </p>
+<ul>
+<li>Low dynamic range<br>
+  We can use linear equalization and 2/3 degree transformation to enlarge the contrast of low dynamic range images.</li>
+<li>High dynamic range<br>
+  We can use nonlinear dynamic range streching, uniform transformation, exponential transformation, rayleigh transformation and hyperbolicun transformation to enlarge the contrast of high dynamic range images.</li>
+</ul>
+</li>
+</ol>
+<h4 id="mathbb-Profile-space-and-space-Projection"><a href="#mathbb-Profile-space-and-space-Projection" class="headerlink" title="$\mathbb{Profile \space and \space Projection}$"></a>$\mathbb{Profile \space and \space Projection}$</h4><ol>
+<li><p><strong>Advantage</strong></p>
+<p> Via image profiles and projections, we can locate the texts or the messages. Thus, we can easily ignore the background, and only pay interest on the messages which the image wants to tell.</p>
+</li>
+</ol>
+<h4 id="mathbb-Find-space-Object"><a href="#mathbb-Find-space-Object" class="headerlink" title="$\mathbb{Find\space Object}$"></a>$\mathbb{Find\space Object}$</h4><ol>
+<li><p><strong>Method</strong></p>
+<p> As said before, we can use image profiles and projections to locate the approximate location of the object. </p>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">HDU-ITMO</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/01/04/Image-processing-Lab-1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Information-system-report" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
