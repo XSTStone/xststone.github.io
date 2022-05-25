@@ -549,9 +549,447 @@
 
 
   
+    <article id="post-FEC-lab2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/04/24/FEC-lab2/">FEC lab2</a>
+    </h1>
+  
+
+        
+        <a href="/2022/04/24/FEC-lab2/" class="archive-article-date">
+  	<time datetime="2022-04-24T08:27:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-24</time>
+</a>
+        
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>This is report PDF file for ITMO FEC lab work. </p>
+<p>If you want more details about codes, or want just simply download the source code with one single click, you can just click the Github icon under my head on the left status bar.</p>
+</blockquote>
+<h3 id="Picture-with-architecture"><a href="#Picture-with-architecture" class="headerlink" title="Picture with architecture"></a>Picture with architecture</h3><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h1qo17efqyj20u019mtdm.jpg" align=center width=70%>
+
+<div STYLE="page-break-after: always;"></div>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">HDU-ITMO</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/04/24/FEC-lab2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-computer_vision_lab1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/04/16/computer_vision_lab1/">Computer Vision Lab 1</a>
+    </h1>
+  
+
+        
+        <a href="/2022/04/16/computer_vision_lab1/" class="archive-article-date">
+  	<time datetime="2022-04-16T13:00:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-16</time>
+</a>
+        
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
+</script>
+<h3 id="mathbb-task"><a href="#mathbb-task" class="headerlink" title="$\mathbb{task}$"></a>$\mathbb{task}$</h3><h4 id="mathbb-purpose"><a href="#mathbb-purpose" class="headerlink" title="$\mathbb{purpose}$"></a>$\mathbb{purpose}$</h4><p><em>Study of the basic methods for images segmentation into semantic areas.</em></p>
+<h4 id="mathbb-theory"><a href="#mathbb-theory" class="headerlink" title="$\mathbb{theory}$"></a>$\mathbb{theory}$</h4><ol>
+<li><p><strong>Image Binarization</strong></p>
+<ol>
+<li><p><strong>Single Binarization</strong><br>$$<br>I_{new}(x, y) =<br>\begin{cases}<br>0, I(x, y) \leq t\<br>1, I(x, y) &gt; t<br>\end{cases}<br>$$<br>In the formula, $t$ means the threshold value. For the grayscale image, we set $t$ as $\frac{0 + 255}{2} = 127$. </p>
+</li>
+<li><p><strong>Double Binarization</strong><br>$$<br>I_{new}(x, y)=<br>\begin{cases}<br>0, I(x, y) \leq t1\<br>1, t1 &lt; I(x, y) \geq t2\<br>0, I(x,y) &gt; t2<br>\end{cases}<br>$$<br>In this formula, $t1$ means the upper threshold value and $t2$ means the lower threshold value. The point $(x, y)$ with lumen is between $t1$ and $t2$ will be preserved.</p>
+</li>
+<li><p><strong>Otsu Binarization</strong></p>
+<p>The threshold value of Otsu have implemented in OpenCV library, cv.THRESH_OTSU. We can just use this value as parameter to implement Otsu binarization.</p>
+</li>
+<li><p><strong>Adaptive binarization</strong></p>
+<p>The method of adaptive binarization is adaptiveThreshold in OpenCV. But we should convert the source image into grayscale since the binarization can only work fine on image with single channel.</p>
+</li>
+</ol>
+</li>
+<li><p><strong>Image Segmentation</strong></p>
+<ol>
+<li><p><strong>Weber Principle</strong><br>$$<br>W(I) =<br>\begin{cases}<br>20 - \frac{12I}{88}, 0 \leq I \leq 88\<br>0.002 (I - 88)^2, 88 &lt; I \leq 138\<br>\frac{7 (I - 138)}{117} + 13, 138 &lt; I \leq 255<br>\end{cases}<br>$$</p>
+</li>
+<li><p><strong>Skin Color</strong></p>
+<p>This method is based on specific values of Red, Green and Blue color. We predefine the color of human skin, and then each point whose RGB values match this scale, we mark it as a skin point.</p>
+<p>Since the lumen value of each point will be different when the environment background light changing, we implement three different criteria for skin colors.<br>$$<br>\begin{cases}<br>R &gt; 45\<br>G &gt; 40\<br>B &gt; 20\<br>max(R, G, B) - min(R, G, B) &gt; 15\<br>\lvert R - G \rvert &gt; 15\<br>R &gt; G\<br>R &gt; B\<br>\end{cases}<br>$$</p>
+<p>$$<br>\begin{cases}<br>R &gt; 220\<br>G &gt; 210\<br>B &gt; 170\<br>\lvert R - G \rvert \leq 15\<br>G &gt; B\<br>R &gt; B\<br>\end{cases}<br>$$</p>
+<p>$$<br>\begin{cases}<br>s = R + G + B\<br>r = \frac{R}{s}\<br>g = \frac{G}{s}\<br>b = \frac{B}{s}\<br>\frac{r}{g} &gt; 1.185\<br>\frac{rb}{s^2} &gt; 0.107\<br>\frac{rg}{s^2} &gt; 0.112<br>\end{cases}<br>$$</p>
+<p>For the first set of formula, it will work fine at uniform day light illumination. The second will work well under flash light or daylight lateral illumination.</p>
+</li>
+<li><p><strong>CIE Lab Color Space</strong></p>
+<p>This method will segmented the image according to the given points in the given sample areas.</p>
+</li>
+</ol>
+</li>
+<li><p><strong>Texture Segmentation</strong></p>
+<ol>
+<li><p>We calculate the entropy of each pixel via their neighborhood, which we can decide the size of. Then we should normalize the entropy to make the content values in the range [0:1]. </p>
+</li>
+<li><p>We should differ gray point from white point via implementing threshold to make the image black and white.</p>
+</li>
+<li><p>We smooth the image and remove the small noises via bwarea and close operation. After that, we should fill the holes to connect the small areas into big ones.</p>
+</li>
+<li><p>Then we can draw the contour along the big holes. </p>
+</li>
+</ol>
+</li>
+</ol>
+<div STYLE="page-break-after: always;"></div>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">HDU-ITMO</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/04/16/computer_vision_lab1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Multicollinearity" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/01/11/Multicollinearity/">Machine learning multicollinearity</a>
+    </h1>
+  
+
+        
+        <a href="/2022/01/11/Multicollinearity/" class="archive-article-date">
+  	<time datetime="2022-01-11T09:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-11</time>
+</a>
+        
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Multicollinearity"><a href="#Multicollinearity" class="headerlink" title="Multicollinearity"></a>Multicollinearity</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>When working with linear regression, it usually comes with multicollinearity. It means that different independent variables have connections between each other.</p>
+<p>This phenomenon is usual, so that it won’t change into big problem unless it causes low robustness. In this case, the samples of regression parameters will be reverse.</p>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Deep learning basics</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/01/11/Multicollinearity/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Logisitic-regression" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/01/11/Logisitic-regression/">Machine learning logisitic regression</a>
+    </h1>
+  
+
+        
+        <a href="/2022/01/11/Logisitic-regression/" class="archive-article-date">
+  	<time datetime="2022-01-11T08:40:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-11</time>
+</a>
+        
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Logistic-regression"><a href="#Logistic-regression" class="headerlink" title="Logistic regression"></a>Logistic regression</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><pre class="mermaid">graph LR;
+ML([Machine learning]) --- Type1([Unsupervised learning])
+ML --- Type2([Supervised learning])
+ML --- Type3([Reinforcement learning])
+Type2 --- Task1([Regression])
+Type2 --- Task2([Classification])
+Task2 --- Model1([Logistic regression])</pre>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Deep learning basics</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/01/11/Logisitic-regression/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Hypothesis-space" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/01/06/Hypothesis-space/">Machine learning hypothesis space</a>
+    </h1>
+  
+
+        
+        <a href="/2022/01/06/Hypothesis-space/" class="archive-article-date">
+  	<time datetime="2022-01-06T11:56:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-06</time>
+</a>
+        
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Hypothesis-space"><a href="#Hypothesis-space" class="headerlink" title="Hypothesis space"></a>Hypothesis space</h1><p>As the main task of machine learning is using one selected function $f(x)$ predicts one or some or even no labels(which is also denoted as <strong>unsupervised learning</strong>), there is always one space for choosing this solution function $f$. </p>
+<p>The space which contains several optional solution functions is called <strong>hypothesis space</strong>.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Deep learning</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/01/06/Hypothesis-space/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
     </nav>
   
 
