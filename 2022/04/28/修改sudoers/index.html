@@ -16,7 +16,7 @@
 <meta property="og:description" content="修改了sudoers文件及后续由于FECLab的编译运行，博客的部署推送需要用到terminal命令，且需要输入很多命令，于是新建了两个command文件，用于自动化完成这些工作。 1234567891011# compile commandcd &#x2F;Users&#x2F;stone&#x2F;VerilogProj&#x2F;lab2_var1iverilog -o model *vvvp modelgtkwave time.">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-04-28T06:06:40.000Z">
-<meta property="article:modified_time" content="2022-04-28T07:54:46.650Z">
+<meta property="article:modified_time" content="2022-05-25T08:25:49.799Z">
 <meta property="article:author" content="Stone">
 <meta property="article:tag" content="MAC">
 <meta name="twitter:card" content="summary">
@@ -157,6 +157,8 @@
       
         <h3 id="修改了sudoers文件及后续"><a href="#修改了sudoers文件及后续" class="headerlink" title="修改了sudoers文件及后续"></a>修改了sudoers文件及后续</h3><p>由于FECLab的编译运行，博客的部署推送需要用到terminal命令，且需要输入<del>很多</del>命令，于是新建了两个command文件，用于自动化完成这些工作。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># compile command</span><br><span class="line">cd /Users/stone/VerilogProj/lab2_var1</span><br><span class="line">iverilog -o model *v</span><br><span class="line">vvp model</span><br><span class="line">gtkwave time.vcd</span><br><span class="line"></span><br><span class="line"># hexo deploy command</span><br><span class="line">cd /Users/stone/blog/</span><br><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">sudo hexo d</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
 
 <p>但是在部署过程中，由于blog文件夹是在根目录stone下，所以部署推送的过程中需要sudo命令来读取其中的配置文件。而sudo命令的运行，又需要手动输入电脑密码，就使得自动化流程变得不再自动化，于是我就跑去修改了/etc/sudoers文件，从而使得当前用户在使用sudo命令时，不再需要密码。</p>
 <p>完成上边的目标其实很简单，只需要把原来文件中的<code>%admin ALL = (ALL)</code> 改成<code>%admin ALL = NOPASSWD:ALL</code>就可以了。但是我使用的是vim，且把内容修改错了，就导致我直接寄了。</p>

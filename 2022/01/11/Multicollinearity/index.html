@@ -16,7 +16,7 @@
 <meta property="og:description" content="MulticollinearityOverviewWhen working with linear regression, it usually comes with multicollinearity. It means that different independent variables have connections between each other. This phenomeno">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-01-11T09:00:00.000Z">
-<meta property="article:modified_time" content="2022-01-11T09:27:30.019Z">
+<meta property="article:modified_time" content="2022-05-25T08:26:46.419Z">
 <meta property="article:author" content="Stone">
 <meta property="article:tag" content="Deep learning basics">
 <meta name="twitter:card" content="summary">
@@ -157,6 +157,8 @@
       
         <h1 id="Multicollinearity"><a href="#Multicollinearity" class="headerlink" title="Multicollinearity"></a>Multicollinearity</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>When working with linear regression, it usually comes with multicollinearity. It means that different independent variables have connections between each other.</p>
 <p>This phenomenon is usual, so that it won’t change into big problem unless it causes low robustness. In this case, the samples of regression parameters will be reverse.</p>
+<span id="more"></span>
+
 <h2 id="Why-multicollinearity-happen"><a href="#Why-multicollinearity-happen" class="headerlink" title="Why multicollinearity happen"></a>Why multicollinearity happen</h2><p>Multicollinearity means when one independent variable is changing, it will cause the other one or more independent variable(s) change. For independent variables, they should be independent. And we can see different variables have different impact on $Y$ via analyzing the regression result.</p>
 <p>However, if $Xs$ have strong <strong>linear connections</strong> between themselves, we cannot find the impacts causing by each $X$ since we can’t control the variables. Thus, we can not find the real connection between $Y$ and each of $Xs$.</p>
 <p>Moreover, multicollinearity will happen in many cases. Such as:</p>
