@@ -15,16 +15,17 @@
 <meta property="og:site_name" content="Stone&#39;s blog">
 <meta property="og:description" content="This is report PDF file for ITMO FEC lab work.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h2lrhlvbmij21df0qkwgk.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h2lro1fh5aj21do0pvdi1.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h2lrvhhfdlj20k60t90v1.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h29g8ifh2xj20u00wl76w.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h29gd09z3lj20wb0u0dhr.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h297xhgu54j21c50u0gtc.jpg">
 <meta property="article:published_time" content="2022-05-15T08:59:18.000Z">
-<meta property="article:modified_time" content="2022-05-26T05:53:40.930Z">
+<meta property="article:modified_time" content="2022-05-26T06:09:22.331Z">
 <meta property="article:author" content="Stone">
 <meta property="article:tag" content="HDU-ITMO">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/e6c9d24egy1h2lrhlvbmij21df0qkwgk.jpg">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h2lro1fh5aj21do0pvdi1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Stone&#39;s blog" type="application/atom+xml">
   
@@ -180,13 +181,16 @@
 <p>If you want more details about codes, or want just simply download the source code with one single click, you can just click the Github icon under my head on the left status bar.</p>
 </blockquote>
 <h3 id="Advice"><a href="#Advice" class="headerlink" title="Advice"></a>Advice</h3><p>这份报告里采取的方法并不是很好。如果你的variant和我的不一样，我建议你的整体架构如下图所示。这有助于你实现<code>lab5</code>中要求的架构。</p>
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h2lrhlvbmij21df0qkwgk.jpg" width=100%>
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h2lro1fh5aj21do0pvdi1.jpg" width=100%>
+
+<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h2lrvhhfdlj20k60t90v1.jpg" width=20%>
+
+<p>其中，<code>CALC UNIT</code>统领下边两个<code>MODULE</code>，这两个<code>MODULE</code>负责完成具体的子任务。<code>CALC UNIT</code>负责与<code>TEST BENCH</code>交互获得计算所需要的<code>clk, rst, a, b, y</code>等信号，还要将这些信号正确地传输给两个<code>MODULE</code>，并获得最后的计算结果。</p>
+<span id="more"></span>
 
 <h3 id="Picture-with-architecture"><a href="#Picture-with-architecture" class="headerlink" title="Picture with architecture"></a>Picture with architecture</h3><img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h29g8ifh2xj20u00wl76w.jpg" width=100%>
 
 <img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h29gd09z3lj20wb0u0dhr.jpg" width=90%>
-
-<span id="more"></span>
 
 <h3 id="Calculation-time-with-clock-frequency-100MHz"><a href="#Calculation-time-with-clock-frequency-100MHz" class="headerlink" title="Calculation time with clock frequency 100MHz"></a>Calculation time with clock frequency 100MHz</h3><p>Clock cycle time: $$\frac{1s}{100MHz} = 10^{-8}$$s</p>
 <p>Square calculation time: $$(1+32)\times 10^{-8}=3.3 \times 10^{-7}$$s</p>
