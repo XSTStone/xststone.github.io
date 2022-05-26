@@ -336,8 +336,46 @@
 <h3 id="Advice"><a href="#Advice" class="headerlink" title="Advice"></a>Advice</h3><p>这份报告里采取的方法并不是很好。如果你的variant和我的不一样，我建议你的整体架构如下图所示。这有助于你实现<code>lab5</code>中要求的架构。</p>
 <img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h2lro1fh5aj21do0pvdi1.jpg" width=100% align=center>
 
-<img src="https://tva1.sinaimg.cn/large/e6c9d24ely1h2lrvhhfdlj20k60t90v1.jpg" width=20% align=center>
-
+<table>
+<thead>
+<tr>
+<th align="center">PROCESS</th>
+<th align="center">A</th>
+<th align="center">B</th>
+<th align="center">CU</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">IDLE</td>
+<td align="center">IDLE</td>
+<td align="center">IDLE</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">WORK</td>
+<td align="center">IDLE</td>
+<td align="center">WAIT A</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">END</td>
+<td align="center">IDLE</td>
+<td align="center">TRANS DATA TO B</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">END</td>
+<td align="center">WORK</td>
+<td align="center">WAIT B</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">END</td>
+<td align="center">END</td>
+<td align="center">GOT FINAL RES</td>
+</tr>
+</tbody></table>
 <p>其中，<code>CALC UNIT</code>统领下边两个<code>MODULE</code>，这两个<code>MODULE</code>负责完成具体的子任务。<code>CALC UNIT</code>负责与<code>TEST BENCH</code>交互获得计算所需要的<code>clk, rst, a, b, y</code>等信号，还要将这些信号正确地传输给两个<code>MODULE</code>，并获得最后的计算结果。</p>
         
       
