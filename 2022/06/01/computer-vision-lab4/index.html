@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h2svjrs0g8j21920u0k00.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h2svoampezj215m0u0gyi.jpg">
 <meta property="article:published_time" content="2022-06-01T13:16:38.000Z">
-<meta property="article:modified_time" content="2022-06-02T03:06:38.500Z">
+<meta property="article:modified_time" content="2022-06-12T13:02:29.865Z">
 <meta property="article:author" content="Stone">
 <meta property="article:tag" content="HDU-ITMO">
 <meta name="twitter:card" content="summary">
@@ -270,7 +270,8 @@
 <p>For the optional tasks, the only difference from the necessary tasks is that the image, or frame is coming from videos and live cameras instead of picture file stored in the disk. We just need to adjust the former function to use frames from videos as input images.</p>
 <h3 id="Answers"><a href="#Answers" class="headerlink" title="Answers"></a>Answers</h3><ol>
 <li><p>What is the special image representation used in the Viola-Jones approach?</p>
-<p>Haar-like features</p>
+<p>An integral image representation. </p>
+<p>In this representation each pixel stores the sum of all pixel values that are positioned to the left and above of the current pixel.</p>
 </li>
 <li><p>What is the main advantage of Haar-like features for classifier training?</p>
 <p>It has very high speed of processing. Can be used in real-time systems.</p>
@@ -573,11 +574,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">IS</a>
+                <a href="javascript:void(0)" class="js-tag color1">Deep learning basics</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Deep learning basics</a>
+                <a href="javascript:void(0)" class="js-tag color3">IS</a>
               </li>
              
               <li class="article-tag-list-item">
