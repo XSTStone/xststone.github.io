@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h1wu345zm3j21fh0u07ae.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/e6c9d24ely1h1wu3xpf9mj20xx0u0gqj.jpg">
 <meta property="article:published_time" content="2022-05-04T05:25:41.000Z">
-<meta property="article:modified_time" content="2022-05-25T08:33:47.753Z">
+<meta property="article:modified_time" content="2022-06-12T17:46:00.574Z">
 <meta property="article:author" content="Stone">
 <meta property="article:tag" content="HDU-ITMO">
 <meta name="twitter:card" content="summary">
@@ -284,6 +284,15 @@
 
 <div STYLE="page-break-after: always;"></div>
 
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><ul>
+<li><p>Line searching</p>
+<p>In OpenCV, there is a pre-defined function can be used for detect straight lines, <code>HoughLinesP</code>. Before calling this function, the input image array should be processed by <code>Canny</code> function to detect the edges.</p>
+</li>
+<li><p>Circle searching</p>
+<p>For circle searching, used method is similar with line searching. The used function is called <code>HoughCircles</code>, and the input images should be detected edges via <code>Canny</code> function.</p>
+<p>For different pictures, we should adjust the parameters of function canny edge detector and HoughCircles searching. Since the hough circle searching function uses images which have been processed by canny function, the low and high threshold value will effect the features of processed images. Thus, the result of found circles will be effected not only by the parameters of HoughCircles function itself, it will also be effected by the parameters of canny edge detector function.</p>
+</li>
+</ul>
 <h3 id="Answers"><a href="#Answers" class="headerlink" title="Answers"></a>Answers</h3><ul>
 <li><p>What’s the main purpose of Hough transformation?</p>
 <p>Hough transform can convert the line formula from Cartesian coordinate system to hough space. </p>
@@ -292,7 +301,18 @@
 <p>No.</p>
 </li>
 <li><p>What are the recurrent and generalized Hough transforms?</p>
-<p>Recurrent hough transforms are usually used for lines. Generalized hough transforms can be used for almost all two-dimensional shapes.</p>
+<p>Recurrent hough transforms are usually used for lines. This algorithm implement his task in task in several steps.</p>
+<ul>
+<li>First, RHT transform one point $A: (x_0, y_0)$ from image space to one line $l :b = -x_0m + y_0$ in hough space where horizontal ordinate is m and vertical ordinate is b. Line $l$ shows all possible lines passed through point A.</li>
+<li>Then, RHT do the same thing to another point $B$ in image space. And here, we got two straight lines in hough spaces. Because of the meaning of lines in hough space, the crossing point of these two lines records the parameters of line which comes cross both $A$ and $B$.</li>
+<li>When we implement algorithm RHT to all points in image space, there will be many crossing points in hough space. To reduce the calculation, we divide the whole hough space into several squares. And for each square, the number of lines which pass through this square will be counted.</li>
+<li>After we got the counted numbers, we compare them to our pre-set threshold value. For those squares whose numbers are above threshold value, we can say that the points whose lines passing through this square are possibly in the same line.</li>
+</ul>
+<p>Generalized hough transforms (GHT) is designed to detect the irregular graphics. GHT implements this task in two steps.</p>
+<ul>
+<li>GHT first need to know what the shape looks like, or what its features are.</li>
+<li>Then, GHT looks through the whole image to check whether there is something which has similar features with the asked shape.</li>
+</ul>
 </li>
 <li><p>What are the ways of parametrization in the Hough transform?</p>
 <p>For the line hough transforms, the definition of function is <code>def HoughLinesP(image, rho, theta, threshold, lines=None, minLineLength=None, maxLineGap=None)</code>. Parameter <code>threshold</code> determines the value of number of points on line which will be viewed as straight line. </p>
@@ -451,7 +471,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Task"><span class="toc-number">1.</span> <span class="toc-text">Task</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Purpose"><span class="toc-number">1.1.</span> <span class="toc-text">Purpose</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Theory"><span class="toc-number">1.2.</span> <span class="toc-text">Theory</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Assignment"><span class="toc-number">1.3.</span> <span class="toc-text">Assignment</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Original-images"><span class="toc-number">1.3.1.</span> <span class="toc-text">Original images</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Line-searching"><span class="toc-number">1.3.2.</span> <span class="toc-text">Line searching</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Result-images"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">Result images</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Code"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">Code</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Circle-searching"><span class="toc-number">1.3.3.</span> <span class="toc-text">Circle searching</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Result-images-1"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">Result images</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Code-1"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">Code</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Explanation"><span class="toc-number">1.3.3.3.</span> <span class="toc-text">Explanation</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Self-implementation"><span class="toc-number">1.3.4.</span> <span class="toc-text">Self implementation</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Code-2"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">Code</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Answers"><span class="toc-number">2.</span> <span class="toc-text">Answers</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Task"><span class="toc-number">1.</span> <span class="toc-text">Task</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Purpose"><span class="toc-number">1.1.</span> <span class="toc-text">Purpose</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Theory"><span class="toc-number">1.2.</span> <span class="toc-text">Theory</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Assignment"><span class="toc-number">1.3.</span> <span class="toc-text">Assignment</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Original-images"><span class="toc-number">1.3.1.</span> <span class="toc-text">Original images</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Line-searching"><span class="toc-number">1.3.2.</span> <span class="toc-text">Line searching</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Result-images"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">Result images</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Code"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">Code</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Circle-searching"><span class="toc-number">1.3.3.</span> <span class="toc-text">Circle searching</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Result-images-1"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">Result images</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Code-1"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">Code</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Explanation"><span class="toc-number">1.3.3.3.</span> <span class="toc-text">Explanation</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Self-implementation"><span class="toc-number">1.3.4.</span> <span class="toc-text">Self implementation</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Code-2"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">Code</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Conclusion"><span class="toc-number">2.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Answers"><span class="toc-number">3.</span> <span class="toc-text">Answers</span></a></li></ol>
                     </div>
                 </span>
             </div>
